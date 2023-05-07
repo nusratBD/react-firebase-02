@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import app from '../../assets/firebase/firebase.init';
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
@@ -17,7 +17,13 @@ const Login = () => {
             })
     }
     const handleSignOut = () =>{
-
+        signOut(auth)
+        .then(result=>{
+            setUser(null);
+        })
+        .catch(error=>{
+            console.log(error);
+        })
     }
     return (
         <div>
@@ -25,7 +31,9 @@ const Login = () => {
                 user ?
                 <div>
                         <button onClick={handleSignOut}>Sign Out</button>
-                        <h3>User: </h3>
+                        <h3>User: {user.displayName}</h3>
+                        <p>Email: {user.email}</p>
+                        <img src={user.photoURL}></img>
                     </div>:
                     <button onClick={handleSignIn}>Sign In With Google</button> 
             }
